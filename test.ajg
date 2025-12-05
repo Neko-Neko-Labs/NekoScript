@@ -1,0 +1,12 @@
+!!Thats a comment!
+>Go label START
+
+#START
+>MyFunc arg1 arg2
+
+if x:
+    do this
+    ::wait blah blah 
+fi
+Print test
+
