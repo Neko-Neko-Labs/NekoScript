@@ -1,8 +1,8 @@
 !!Thats a comment!
->Go label START
+::Go label START
 
 #START
->MyFunc arg1 arg2
+::MyFunc      arg1   arg2
 
 if x:
     do this

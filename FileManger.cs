@@ -10,7 +10,7 @@ public class FileManager {
             Console.WriteLine("Can't accses to file!");
             return;
         }
-        AJG.SetFuncPrefix(">");
+        AJG.SetFuncPrefix("::");
         AJG.SetLabFix("#");
         AJG.SetCommentPrefix("!!");
         IEnumerable<string> codefrfr = File.ReadLines(path);
