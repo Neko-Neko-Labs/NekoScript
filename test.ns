@@ -1,0 +1,23 @@
+//Thats a comment!
+::Go label START
+
+#START
+::Move enemy 3 4
+
+let x be 1;
+let y be $x;
+
+if x < 4 do
+    this
+    increment x;
+    ::Wait blah blah 
+fi
+
+if x < 2 do
+    ::Wait yada yada
+    increment y;
+
+let myvar be $x + $y
+
+Print $myvar
+
