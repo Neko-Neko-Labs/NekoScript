@@ -4,48 +4,62 @@ using System.Text.RegularExpressions;
 
 namespace AJGToken {
     public class Tokenizer {
-        private static HashSet<string> keywords = new HashSet<string> {
+        private static readonly HashSet<string> keywords = new HashSet<string> {
             "if", "elif", "else", "fi"
         };
 
         public static List<Token> Tokenize(IEnumerable<string> lines) {
             List<Token> tokens = new List<Token>();
-            int linenm = 1;
+            int linenm = 0;
             foreach (var line in lines) {
-                string trimmed = line.TrimStart().TrimEnd();
-                trimmed = Regex.Replace(trimmed, @"\s+", " ");
+                string trimmed = Regex.Replace(line.Trim(), @"\s+", " ");
                 if (String.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith(AJG.Commentfix)) continue;
-                string[] linear = trimmed.Split(' ');
-                if (trimmed.StartsWith(AJG.Prefix)) {
-                    linear[0] = linear[0].Substring(AJG.Prefix.Length);
-                    tokens.Add(new Token(TokenType.FUNC, linear[0], linenm, linear.Skip(1).ToArray()));
-                } else if (linear[0].StartsWith(AJG.Labfix)) {
-                    tokens.Add(new Token(TokenType.LABEL, linear[0], linenm));
-                } else if (keywords.Contains(linear[0]) && line.EndsWith(':')) {
-                    int len = linear.Length;
-                    linear[len-1] = linear[len-1].Substring(0, linear[len-1].Length-1);
-                    tokens.Add(new Token(TokenType.KEYWORD, linear[0], linenm, linear.Skip(1).ToArray()));
-                } else {
-                    tokens.Add(new Token(TokenType.TEXT, trimmed, linenm));
+                string[] parts = trimmed.Split(' ');
+                TokenType type = FindKind(parts);
+                switch (type) {
+                    case TokenType.FUNC:
+                        parts[0] = parts[0].Substring(AJG.Prefix.Length);
+                        tokens.Add(new Token(TokenType.FUNC, parts[0], linenm, parts.Skip(1).ToArray()));
+                        break;;
+                    case TokenType.LABEL:
+                        tokens.Add(new Token(TokenType.LABEL, parts[0], linenm));
+                        break;;
+                    case TokenType.KEYWORD:
+                        if (parts[^1].EndsWith(':')) parts[^1] = parts[^1][..^1];
+                        tokens.Add(new Token(TokenType.KEYWORD, parts[0], linenm, parts.Skip(1).ToArray()));
+                        break;;
+                    case TokenType.TEXT:
+                        tokens.Add(new Token(TokenType.TEXT, trimmed, linenm));
+                        break;;
+                    default:
+                        tokens.Add(new Token(TokenType.UNKNOWN, parts[0], linenm, parts.Skip(1).ToArray()));
+                        break;;
                 }
                 ++linenm;
             }
             return tokens;
         }
 
+        public static TokenType FindKind(string[] parts) {
+            if (parts[0].StartsWith(AJG.Prefix)) return TokenType.FUNC;
+            else if (parts[0].StartsWith(AJG.Labfix)) return TokenType.LABEL;
+            else if (keywords.Contains(parts[0])) return TokenType.KEYWORD;
+            else return TokenType.TEXT;
+        }
+
     }
 
     public class Token {
-        public TokenType Type;
-        public string Value;
-        public string[] Args;
-        public int LineNumber;
+        public TokenType Type { get; }
+        public string Value { get; }
+        public string[] Args { get; }
+        public int LineNumber { get; }
 
         public Token(TokenType type, string val, int line, string[] args = null) {
             this.Type = type;
             this.Value = val;
             this.LineNumber = line;
-            this.Args = args ?? new string[0];
+            this.Args = args ?? Array.Empty<string>();
         }
 
         public override string ToString() {
@@ -53,13 +67,16 @@ namespace AJGToken {
                 return $"{this.LineNumber}: {this.Type} -> {this.Value}({String.Join(", ", this.Args)})";
             else if (this.Type == TokenType.KEYWORD)
                 return $"{this.LineNumber}: {this.Type} -> {this.Value} ({String.Join(" ", this.Args)})";
+            else if (this.Type == TokenType.UNKNOWN)
+                return $"{this.LineNumber}: {this.Type} -> {this.Value} ({String.Join(" ", this.Args)})";
+
             else
                 return $"{this.LineNumber}: {this.Type} -> {this.Value}";
         }
     }
 
     public enum TokenType {
-        FUNC, IDENTIFIER, KEYWORD, TEXT, LABEL, VAR
+        FUNC, IDENTIFIER, KEYWORD, TEXT, LABEL, VAR, UNKNOWN
     }
 }
 
