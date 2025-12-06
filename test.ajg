@@ -4,7 +4,7 @@
 #START
 ::MyFunc      arg1   arg2
 
-if x:
+if x < 4:
     do this
     ::wait blah blah 
 fi

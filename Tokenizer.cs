@@ -52,7 +52,7 @@ namespace AJGToken {
     public class Token {
         public TokenType Type { get; }
         public string Value { get; }
-        public string[] Args { get; }
+        public string[] Args { get; private set; }
         public int LineNumber { get; }
 
         public Token(TokenType type, string val, int line, string[] args = null) {
@@ -64,14 +64,13 @@ namespace AJGToken {
 
         public override string ToString() {
             if (this.Type == TokenType.FUNC)
-                return $"{this.LineNumber}: {this.Type} -> {this.Value}({String.Join(", ", this.Args)})";
+                return $"{this.Type}({this.Value}) {String.Join(" ", this.Args.Select(x => $"ARG({x})"))}";
             else if (this.Type == TokenType.KEYWORD)
-                return $"{this.LineNumber}: {this.Type} -> {this.Value} ({String.Join(" ", this.Args)})";
+                return $"{this.Type}({this.Value}) {String.Join(" ", this.Args.Select(x => $"IDENTIFIER({x})"))}";
             else if (this.Type == TokenType.UNKNOWN)
-                return $"{this.LineNumber}: {this.Type} -> {this.Value} ({String.Join(" ", this.Args)})";
-
+                return $"{this.Type}({this.Value})";
             else
-                return $"{this.LineNumber}: {this.Type} -> {this.Value}";
+                return $"{this.Type}({this.Value})";
         }
     }
 
