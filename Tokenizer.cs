@@ -63,14 +63,7 @@ namespace AJGToken {
         }
 
         public override string ToString() {
-            if (this.Type == TokenType.FUNC)
-                return $"{this.Type}({this.Value}) {String.Join(" ", this.Args.Select(x => $"ARG({x})"))}";
-            else if (this.Type == TokenType.KEYWORD)
-                return $"{this.Type}({this.Value}) {String.Join(" ", this.Args.Select(x => $"IDENTIFIER({x})"))}";
-            else if (this.Type == TokenType.UNKNOWN)
-                return $"{this.Type}({this.Value})";
-            else
-                return $"{this.Type}({this.Value})";
+            return $"{this.Type}({this.Value}) {String.Join(" ", this.Args.Select(x => $"ARG({x})"))}";
         }
     }
 
