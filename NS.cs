@@ -1,4 +1,4 @@
-public class AJG {
+public class NS {
     public static string Prefix = "::";
     public static string Labfix = "#";
     public static string Commentfix = "//";

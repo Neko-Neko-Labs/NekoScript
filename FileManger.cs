@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using AJGToken;
+using NSToken;
 
 public class FileManager {
     public static void Main(string[] args) {
@@ -10,9 +10,9 @@ public class FileManager {
             Console.WriteLine("Can't accses to file!");
             return;
         }
-        AJG.SetFuncPrefix("::");
-        AJG.SetLabFix("#");
-        AJG.SetCommentPrefix("!!");
+        NS.SetFuncPrefix("::");
+        NS.SetLabFix("#");
+        NS.SetCommentPrefix("!!");
         IEnumerable<string> codefrfr = File.ReadLines(path);
         List<Token> tkn = Tokenizer.Tokenize(codefrfr);
 

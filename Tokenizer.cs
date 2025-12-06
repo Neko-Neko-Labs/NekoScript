@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace AJGToken {
+namespace NSToken {
     public class Tokenizer {
         private static readonly HashSet<string> keywords = new HashSet<string> {
             "if", "elif", "else", "fi"
@@ -13,12 +13,12 @@ namespace AJGToken {
             int linenm = 0;
             foreach (var line in lines) {
                 string trimmed = Regex.Replace(line.Trim(), @"\s+", " ");
-                if (String.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith(AJG.Commentfix)) continue;
+                if (String.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith(NS.Commentfix)) continue;
                 string[] parts = trimmed.Split(' ');
                 TokenType type = FindKind(parts);
                 switch (type) {
                     case TokenType.FUNC:
-                        parts[0] = parts[0].Substring(AJG.Prefix.Length);
+                        parts[0] = parts[0].Substring(NS.Prefix.Length);
                         tokens.Add(new Token(TokenType.FUNC, parts[0], linenm, parts.Skip(1).ToArray()));
                         break;;
                     case TokenType.LABEL:
@@ -41,8 +41,8 @@ namespace AJGToken {
         }
 
         public static TokenType FindKind(string[] parts) {
-            if (parts[0].StartsWith(AJG.Prefix)) return TokenType.FUNC;
-            else if (parts[0].StartsWith(AJG.Labfix)) return TokenType.LABEL;
+            if (parts[0].StartsWith(NS.Prefix)) return TokenType.FUNC;
+            else if (parts[0].StartsWith(NS.Labfix)) return TokenType.LABEL;
             else if (keywords.Contains(parts[0])) return TokenType.KEYWORD;
             else return TokenType.TEXT;
         }
