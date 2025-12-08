@@ -4,20 +4,20 @@
 #START
 ::Move enemy 3 4
 
-let x be 1;
-let y be $x;
+let x = 1
+let y = $x
 
-if x < 4 do
+if $x < 4 do
     this
-    increment x;
+    increment x //test
     ::Wait blah blah 
-fi
+fi //test comment
 
 if x < 2 do
     ::Wait yada yada
-    increment y;
+increment y
 
-let myvar be $x + $y
+let myvar = $x + $y
 
 Print $myvar
 

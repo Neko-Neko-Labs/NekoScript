@@ -37,11 +37,18 @@ Using this, ::test arg1 arg2 in a script will call your C# function with the arg
 let x = 1
 let y = $x
 
-if x < 4 do
+if $x < 4 do
     this
     increment x
     ::Wait blah blah 
 fi
+
+if $x < 2 
+    print selam
+
+increment x
+let myvar = $x + $y
+Print $myvar
 ```
 
 2. .c parser (C-like syntax):
@@ -52,14 +59,17 @@ fi
 #START
 ::Move enemy 3 4
 
-let x be 1
-let y be $x
+let x = 1
+let y = $x
 
 if x < 4 {
     this
     increment x
     ::Wait blah blah 
 }
+
+if x < 2 
+    print selam
 
 y++
 let myvar = $x + $y
@@ -82,13 +92,14 @@ This runs `main.ns` first, and any `::Go file otherfile` commands will jump to t
 
 ## Getting Started
 1. Add NekoScript to your C# project.
-2. Initialize the engine:
+2. Set environment variables (Like NS.SetFuncPrefix("::");)
+3. Initialize the engine:
 ```csharp
     NS.Initialize();
 ```
-3. Register your commands.
-4. Select your parser.
-5. Run your scripts with `NS.RunDir("path/to/dir")`.
+4. Register your commands.
+5. Select your parser.
+6. Run your scripts with `NS.RunDir("path/to/dir")`.
 
 
 
